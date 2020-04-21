@@ -47,6 +47,10 @@ class ViewController: UIViewController {
         
     }
     
+    override func viewDidLoad() {
+        initializeThemes()
+    }
+    
     func updateViewFromModel () {
         for index in cardButtons.indices {
             let button = cardButtons[index]
@@ -65,15 +69,17 @@ class ViewController: UIViewController {
     
     //TODO: add themes 
     var emojiChoices = [[String]]()
+    var currentTheme = Int()
     
     func initializeThemes () {
+        emojiChoices.removeAll()
         emojiChoices.append(["🦇", "👻","🎃" ,"🙀", "😱", "🍭", "😈", "🍬"])
         emojiChoices.append(["❄️", "⛄️", "🥶", "⛷", "🏂", "🎄", "🎅", "🌟"])
+        emojiChoices.append(["🏀", "🏈", "🏏", "🏐", "🏓", "⚾️", "🎾", "🏸"])
+        emojiChoices.append(["🦙", "🦛", "🦥", "🦩", "🐘", "🦚", "🦞", "🦡"])
+        currentTheme = Int.random(in: 0..<emojiChoices.count)
     }
     
-
-    
-    //Alternate declaration var emoji = [Int:String]()
     //Dictionary that stores the id for the card and its corresponding emoji
     var emoji = Dictionary<Int, String>()
     
@@ -81,21 +87,15 @@ class ViewController: UIViewController {
     func emoji (for card: Card) -> String {
         //if there is no emoji currently associated with the card id, and we have not used all our emojis, assign one of the...
         //... remaining emojis in our emojiChoices array to the current card.
-        if emoji[card.identifier] == nil, emojiChoices.count > 0 {
+        //we also need the "if" because Dictionary returns an Optional (not purely String) since the value we're looking for might not exist
+        if emoji[card.identifier] == nil, emojiChoices[currentTheme].count > 0 {
                 //generates random index value within our remaining emojiChoices array, assigns random emoji to this card
-                let randomIndex = Int (arc4random_uniform(UInt32(emojiChoices.count)))
-                emoji[card.identifier] = emojiChoices.remove(at: randomIndex)
+            let randomIndex = Int.random(in: 0..<emojiChoices[currentTheme].count)
+                emoji[card.identifier] = emojiChoices[currentTheme].remove(at: randomIndex)
         }
         
         //if nil, return "?", same as commented code below
         return emoji[card.identifier] ?? "?"
-        
-        /*we need the "if" because Dictionary returns an Optional (not purely String) since the value we're looking for might not exist
-        if emoji[card.identifier] != nil {
-            return emoji[card.identifier]!
-        } else {
-            return "?"
-        } */
         
     }
     
