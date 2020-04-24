@@ -12,19 +12,16 @@ class ViewController: UIViewController {
     
     lazy var game = Concentration(numberOfPairsOfCards: (cardButtons.count + 1)/2)
     
-    var flipCount = 0 {
-        didSet  {
-            flipCountLabel.text = "Flips: \(flipCount)"
-        }
-    }
-        
+    
     @IBOutlet weak var flipCountLabel: UILabel!
-
+    @IBOutlet weak var gameScoreLabel: UILabel!
+    
     @IBOutlet var newGameButton: UIButton!
     
     @IBAction func hitReset (_ sender: UIButton) {
         game = Concentration(numberOfPairsOfCards: (cardButtons.count + 1)/2)
-        flipCount = 0
+        flipCountLabel.text = "Flips: \(game.flipCount)"
+        gameScoreLabel.text = "Game Score: \(game.score)"
         emoji.removeAll()
         initializeThemes()
         game.flipAllDown()
@@ -35,9 +32,8 @@ class ViewController: UIViewController {
     
     //" _ " is done when there is no argument, not typically used
     @IBAction func touchCard(_ sender: UIButton) {
-        flipCount += 1
         
-        if  let cardNumber = cardButtons.firstIndex(of: sender) {
+        if let cardNumber = cardButtons.firstIndex(of: sender) {
             game.chooseCard(at: cardNumber)
             updateViewFromModel()
         } else {
@@ -45,8 +41,12 @@ class ViewController: UIViewController {
             print ("chosen card not in cardButtons")
         }
         
+        flipCountLabel.text = "Flips: \(game.flipCount)"
+        gameScoreLabel.text = "Game Score: \(game.score)"
+        
     }
     
+    //function called when view loads onto screen. similar to main().
     override func viewDidLoad() {
         initializeThemes()
     }

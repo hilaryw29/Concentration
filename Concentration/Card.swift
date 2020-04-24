@@ -12,6 +12,7 @@ struct Card {
     //non static variables stored with each individual card
     var isFaceUp = false
     var isMatched  = false
+    var hasFlipped = false
     var identifier : Int
     
     //static variables are stored with the TYPE Card

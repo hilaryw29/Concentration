@@ -11,7 +11,10 @@ import Foundation
 class Concentration {
     var cards = [Card]()
     //optional var will be nil when there is NOT only 1 card face up
-    var  indexOfOneAndOnlyFaceUpCard : Int?
+    var indexOfOneAndOnlyFaceUpCard : Int?
+    var score : Int
+    var flipCount : Int
+
     
     func chooseCard (at index: Int) {
         if !cards[index].isMatched {
@@ -20,6 +23,12 @@ class Concentration {
                 if cards[matchIndex].identifier == cards[index].identifier {
                     cards[matchIndex].isMatched = true
                     cards[index].isMatched = true
+                    score += 2
+                } else if cards[index].hasFlipped || cards[matchIndex].hasFlipped {
+                    score -= 1
+                } else {
+                    cards[index].hasFlipped = true
+                    cards[matchIndex].hasFlipped = true
                 }
                 cards[index].isFaceUp = true
                 indexOfOneAndOnlyFaceUpCard = nil
@@ -30,6 +39,7 @@ class Concentration {
                 indexOfOneAndOnlyFaceUpCard = index
             }
         }
+        flipCount += 1
     }
     
     func flipAllDown () {
@@ -54,6 +64,8 @@ class Concentration {
         }
         
         //TODO: Shuffle the cards (homework)
+        score = 0
+        flipCount = 0
         cards.shuffle()
         
     }
